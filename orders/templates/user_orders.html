@@ -8,10 +8,10 @@
 <!-- order id on right -->
 <b style="float: right;">Order Id: {{ order.id }}</b>
 <!-- order payment status -->
-{% if order.status %}
+{% if order.status_order == 'confirmed' %}
     <h4><b class="text-success">Successful</b></h4>
 {% else %}
-    <h3><b class="text-danger">Cancelled</b></h3>
+    <h3><b class="text-info">En cours</b></h3>
 {% endif %}
 <div class="text-muted border-top pt-2"></div>
 {% for item in order.items.all  %}
