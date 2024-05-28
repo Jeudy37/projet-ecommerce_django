@@ -2,7 +2,7 @@ from django import forms
 from django.forms import ModelForm
 
 from shop.models import Product, Category
-
+from orders.models import Order
 
 class AddProductForm(ModelForm):
     class Meta:
@@ -37,3 +37,9 @@ class EditProductForm(ModelForm):
         super(EditProductForm, self).__init__(*args, **kwargs)
         for visible in self.visible_fields():
             visible.field.widget.attrs['class'] = 'form-control'
+
+
+class OrderStatusForm(forms.ModelForm):
+    class Meta:
+        model = Order
+        fields = ['status']

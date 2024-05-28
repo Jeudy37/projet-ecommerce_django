@@ -48,7 +48,7 @@ def user_register(request):
         if form.is_valid():
             data = form.cleaned_data
             user = User.objects.create_user(
-                data['email'], data['full_name'], data['password']
+                data['email'], data['full_name'], data['password'],data['adresse'],data['phone']
             )
             return redirect('accounts:user_login')
     else:
@@ -85,12 +85,14 @@ def user_logout(request):
 
 
 def edit_profile(request):
-    form = EditProfileForm(request.POST, instance=request.user)
-    if form.is_valid():
-        form.save()
-        messages.success(request, 'Your profile has been updated', 'success')
-        return redirect('accounts:edit_profile')
+    if request.method == 'POST':
+        form = EditProfileForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Your profile has been updated successfully.')
+            return redirect('accounts:edit_profile')
     else:
         form = EditProfileForm(instance=request.user)
-    context = {'title':'Edit Profile', 'form':form}
+    
+    context = {'title': 'Edit Profile', 'form': form}
     return render(request, 'edit_profile.html', context)

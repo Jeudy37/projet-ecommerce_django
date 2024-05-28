@@ -5,11 +5,16 @@ from shop.models import Product
 
 
 class Order(models.Model):
+    STATUS_CHOICES = (
+        ('pending', 'Pending'),
+        ('confirmed', 'Confirmed'),
+        ('cancelled', 'Cancelled'),
+    )
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='orders')
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     status = models.BooleanField(default=False)
-
+    status_order= models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
     class Meta:
         ordering = ('-created',)
 

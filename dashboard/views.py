@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
 from django.http import Http404
-
+from .forms import OrderStatusForm
 from shop.models import Product
 from accounts.models import User
 from orders.models import Order, OrderItem
@@ -92,7 +92,32 @@ def orders(request):
 @user_passes_test(is_manager)
 @login_required
 def order_detail(request, id):
-    order = Order.objects.filter(id=id).first()
-    items = OrderItem.objects.filter(order=order).all()
-    context = {'title':'order detail', 'items':items, 'order':order}
+    order = get_object_or_404(Order, id=id)
+    items = OrderItem.objects.filter(order=order)
+    form = OrderStatusForm(instance=order)
+    
+    if request.method == 'POST':
+        form = OrderStatusForm(request.POST, instance=order)
+        if form.is_valid():
+            form.save()
+            return redirect('order_detail', id=id)
+    
+    context = {'title': 'Order Detail', 'items': items, 'order': order, 'form': form}
     return render(request, 'order_detail.html', context)
+
+
+@user_passes_test(is_manager)
+@login_required
+def order_confirm(request, order_id):
+    order = get_object_or_404(Order, id=order_id)
+    order.status_order = 'confirmed'
+    order.save()
+    return redirect('dashboard:order_detail', id=order_id)
+
+@user_passes_test(is_manager)
+@login_required
+def order_cancel(request, order_id):
+    order = get_object_or_404(Order, id=order_id)
+    order.status_order = 'cancelled'
+    order.save()
+    return redirect('dashboard:order_detail', id=order_id)
