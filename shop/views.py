@@ -62,6 +62,14 @@ def favorites(request):
 	return render(request, 'favorites.html', context)
 
 
+
+
+def about_page(request):
+	
+	
+	return render(request, 'about_page.html')
+
+
 def search(request):
 	query = request.GET.get('q')
 	products = Product.objects.filter(title__icontains=query).all()

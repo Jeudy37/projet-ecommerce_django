@@ -10,6 +10,7 @@ urlpatterns = [
 	path('add/favorites/<int:product_id>/', views.add_to_favorites, name='add_to_favorites'),
 	path('remove/favorites/<int:product_id>/', views.remove_from_favorites, name='remove_from_favorites'),
 	path('favorites/', views.favorites, name='favorites'),
+	path('about/', views.about_page, name='about'),
 	path('search/', views.search, name='search'),
 	path('filter/<slug:slug>/', views.filter_by_category, name='filter_by_category'),
 ]
