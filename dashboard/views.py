@@ -4,10 +4,10 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
 from django.http import Http404
 from .forms import OrderStatusForm
-from shop.models import Product
+from shop.models import Product ,Category
 from accounts.models import User
 from orders.models import Order, OrderItem
-from .forms import AddProductForm, AddCategoryForm, EditProductForm
+from .forms import AddProductForm, AddCategoryForm, EditProductForm,EditCategorietForm
 
 
 def is_manager(user):
@@ -25,6 +25,13 @@ def products(request):
     products = Product.objects.all()
     context = {'title':'Products' ,'products':products}
     return render(request, 'products.html', context)
+
+@user_passes_test(is_manager)
+@login_required
+def categories(request):
+    categorys = Category.objects.all()
+    context = {'title':'Categorys' ,'categorys':categorys}
+    return render(request, 'categories.html', context)
 
 
 @user_passes_test(is_manager)
@@ -52,6 +59,14 @@ def delete_product(request, id):
 
 @user_passes_test(is_manager)
 @login_required
+def delete_category(request, id):
+    Categori = Category.objects.filter(id=id).delete()
+    messages.success(request, 'Category has been deleted!', 'success')
+    return redirect('dashboard:categories')
+
+
+@user_passes_test(is_manager)
+@login_required
 def edit_product(request, id):
     product = get_object_or_404(Product, id=id)
     if request.method == 'POST':
@@ -64,6 +79,24 @@ def edit_product(request, id):
         form = EditProductForm(instance=product)
     context = {'title': 'Edit Product', 'form':form}
     return render(request, 'edit_product.html', context)
+
+
+
+@user_passes_test(is_manager)
+@login_required
+def edit_categori(request, id):
+    categori = get_object_or_404(Category, id=id)
+    print('categori an',categori)
+    if request.method == 'POST':
+        form = EditCategorietForm(request.POST, instance=categori)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Category has been updated', 'success')
+            return redirect('dashboard:categories')
+    else:
+        form = EditCategorietForm(instance=categori)
+    context = {'title': 'Edit Categorie', 'form':form}
+    return render(request, 'edit_categori.html', context)
 
 
 @user_passes_test(is_manager)

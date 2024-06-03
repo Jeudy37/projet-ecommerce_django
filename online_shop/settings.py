@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'orders.apps.OrdersConfig',
     'shop.apps.ShopConfig',
     'dashboard.apps.DashboardConfig',
+    'crispy_bootstrap4'
 ]
 
 MIDDLEWARE = [
@@ -45,6 +46,9 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'online_shop.urls'
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
 
 TEMPLATES = [
     {

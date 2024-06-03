@@ -1,39 +1,47 @@
 {% extends "base.html" %}
 
 {% block content %}
-
-{% if orders %}
-{% for order in orders %}
-<div class="col-md-7 mb-4 border rounded p-3">
-<!-- order id on right -->
-<b style="float: right;">Order Id: {{ order.id }}</b>
-<!-- order payment status -->
-{% if order.status_order == 'confirmed' %}
-    <h4><b class="text-success">Successful</b></h4>
-{% else %}
-    <h3><b class="text-info">En cours</b></h3>
-{% endif %}
-<div class="text-muted border-top pt-2"></div>
-{% for item in order.items.all  %}
-    <div class="border-bottom p-2">
-        <p>product: <a class="text-decoration-none" href="{{ item.product.get_absolute_url }}">{{item.product.title}}</a></p>
-        <p>Price: ${{item.price}}</p>
-        <p>quantity: {{item.quantity}}</p>
-    </div>
-{% endfor %}
-<b>Total price: ${{ order.get_total_price }}</b>
-</div>
-{% endfor %}
-{% else %}
-<div class="row">
-    <div class="col-md-2"></div>
-    <div class="col-md-8 mt-5 pt-5 text-center">
-      <br>
-      <h3 class="text-muted text-capitalize">Orders list is empty..!</h3>
-      <a href="/" class="text-primary text-decoration-none">Back</a>
-    </div>
-    <div class="col-md-2"></div>
-</div>
-{% endif %}
-
+<section class="container mt-5">
+    {% if orders %}
+        <div class="row justify-content-center">
+            {% for order in orders %}
+                <div class="col-md-7 mb-4">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <h4 class="card-title">
+                                    {% if order.status_order == 'confirmed' %}
+                                        <span class="text-success">Successful</span>
+                                    {% else %}
+                                        <span class="text-info">En cours</span>
+                                    {% endif %}
+                                </h4>
+                                <span><b>Order Id: {{ order.id }}</b></span>
+                            </div>
+                            <hr>
+                            {% for item in order.items.all %}
+                                <div class="mb-3">
+                                    <p class="mb-1"><b>Product:</b> <a class="text-decoration-none" href="{{ item.product.get_absolute_url }}">{{ item.product.title }}</a></p>
+                                    <p class="mb-1"><b>Price:</b> ${{ item.price }}</p>
+                                    <p class="mb-1"><b>Quantity:</b> {{ item.quantity }}</p>
+                                </div>
+                                <hr>
+                            {% endfor %}
+                            <h5 class="card-text"><b>Total price:</b> ${{ order.get_total_price }}</h5>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-8 mt-5 pt-5 text-center">
+                <h3 class="text-muted text-capitalize">Orders list is empty..!</h3>
+                <a href="/" class="btn btn-primary mt-3">Back</a>
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+    {% endif %}
+</section>
 {% endblock %}

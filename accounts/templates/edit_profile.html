@@ -2,15 +2,21 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
+<section class="d-flex justify-content-center align-items-center">
     <div class="col-md-6">
-        <form method="POST">
-            {% csrf_token %}
-            <h3>Edit Profile</h3>
-            <hr>
-            {{ form|crispy  }}
-            <div class="form-group">
-                <button class="btn btn-primary mt-3 w-100" type="submit">Update</button>
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <form method="POST">
+                    {% csrf_token %}
+                    <h3 class="text-center mb-4" style="font-size: 36px;">Edit Profile</h3>
+                   
+                    {{ form|crispy }}
+                    <div class="form-group">
+                        <button class="btn btn-primary mt-3 w-100" type="submit">Update</button>
+                    </div>
+                </form>
             </div>
-        </form>
+        </div>
     </div>
+</section>
 {% endblock %}

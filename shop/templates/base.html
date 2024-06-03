@@ -5,91 +5,99 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- google fonts -->
+    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
-    <!-- bootstrap css cdn -->
+    <!-- Bootstrap CSS CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <title>{% if title %} {{ title }} {% else %}  Click ' n' buy {% endif %}</title>
+    <title>{% if title %}{{ title }}{% else %}Click 'n' Buy{% endif %}</title>
 </head>
 <body>
-  <header class="p-2 border-bottom">
+  <header class="p-3 bg-light shadow-sm">
     <div class="container">
-      <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-        <!-- cart icon -->
-        <strong class="me-4 text-primary"> Click ' n' buy     </strong>
-        {% if request.user.is_authenticated %}
-        <b class="text-primary">{{ cart_count }}</b>
-        {% endif %}
-        <a href="{% url 'cart:show_cart' %}" class="text-primary mt-2 me-2"><i class="material-icons h3">&#xe8cc;</i></a>
-        <!-- favorite icon -->
-        {% if request.user.is_authenticated %}
-        <b class="text-primary">{{ request.user.get_likes_count}}</b>
-        {% endif %}
-        <a href="{% url 'shop:favorites' %}" class="text-primary mt-2 me-2"><i class="material-icons h3">&#xe87d;</i></a>
-        <!-- Menu -->
+      <div class="d-flex flex-wrap align-items-center justify-content-between">
+        <div class="d-flex align-items-center">
+          <!-- Logo and Brand -->
+          <strong class="me-4 text-primary" style="font-size: 24px;">Click 'n' Buy</strong>
+          <!-- Cart icon -->
+          {% if request.user.is_authenticated %}
+            <span class="badge bg-primary me-2">{{ cart_count }}</span>
+          {% endif %}
+          <a href="{% url 'cart:show_cart' %}" class="text-primary me-3">
+            <i class="material-icons h3 mb-0">&#xe8cc;</i>
+          </a>
+          <!-- Favorite icon -->
+          {% if request.user.is_authenticated %}
+            <span class="badge bg-primary me-2">{{ request.user.get_likes_count }}</span>
+          {% endif %}
+          <a href="{% url 'shop:favorites' %}" class="text-primary me-3">
+            <i class="material-icons h3 mb-0">&#xe87d;</i>
+          </a>
+        </div>
+        <!-- Navigation Menu -->
         <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-          <li><a href="{% url 'shop:home_page' %}" class="nav-link px-2 text-dark">Home</a></li>
-          <li><a href="#" class="nav-link px-2 text-dark">Shop</a></li>
-          <!-- categories dropdown -->
-          <div class="dropdown text-end">
-            <a href="#" class=" mt-2 me-1 ms-1 text-dark d-block link-dark text-decoration-none dropdown-toggle"id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">Categories</a>
-            <ul class="dropdown-menu" aria-labelledby="dropdownUser1">
+          <li class="nav-item">
+            <a href="{% url 'shop:home_page' %}" class="nav-link px-2 text-dark" style="font-size: 18px;">Home</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a href="#" class="nav-link px-2 dropdown-toggle text-dark" id="categoriesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 18px;">Categories</a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="categoriesDropdown">
               {% for category in categories %}
-              <!-- check if category is parent -->
                 {% if not category.is_sub %}
-                  <!-- parent -->
-                  <li><a href="{% url 'shop:filter_by_category' category.slug %}" class="dropdown-item text-capitalize bg-light border"><b>{{ category }}</b></a></li>
+                  <li class="dropdown-item">
+                    <a href="{% url 'shop:filter_by_category' category.slug %}" class="text-dark text-capitalize text-decoration-none"><b>{{ category }}</b></a>
+                  </li>
                   {% for child in category.sub_categories.all %}
-                   <!-- child -->
-                   <li><a href="{% url 'shop:filter_by_category' child.slug %}" class="dropdown-item">{{ child }}</a></li>
+                    <li class="dropdown-item ps-3">
+                      <a href="{% url 'shop:filter_by_category' child.slug %}" class="text-dark text-decoration-none">{{ child }}</a>
+                    </li>
                   {% endfor %}
                 {% endif %}
               {% endfor %}
             </ul>
-          </div>
-         
-          <li><a href="{% url 'shop:about' %}" class="nav-link px-2 text-dark">About</a></li>
+          </li>
+          <li class="nav-item">
+            <a href="{% url 'shop:about' %}" class="nav-link px-2 text-dark" style="font-size: 18px;">About</a>
+          </li>
         </ul>
-        <!-- search form -->
-        <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" action="{% url 'shop:search' %}">
+        <!-- Search form -->
+        <form class="d-flex col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" action="{% url 'shop:search' %}">
           <input name="q" type="search" class="form-control form-control-dark" placeholder="Search..." aria-label="Search">
         </form>
+        <!-- User account actions -->
         {% if request.user.is_authenticated %}
-        <!-- user profile dropdown -->
-        <div class="dropdown text-end">
-          <a href="#" class="btn btn-primary text-white me-4 d-block link-dark text-decoration-none dropdown-toggle"id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">Profile</a>
-          <ul class="dropdown-menu" aria-labelledby="dropdownUser1">
-            <li><a href="{% url 'cart:show_cart' %}" <a class="dropdown-item">Cart</a></li>
-            <li><a href="{% url 'shop:favorites' %}" <a class="dropdown-item">Favorites</a></li>
-            <li><a href="{% url 'orders:user_orders' %}" <a class="dropdown-item">Orders</a></li>
-            <li><a class="dropdown-item" href="{% url 'accounts:edit_profile' %}">Edit Profile</a></li>
-            <li><a class="dropdown-item text-danger" href="{% url 'accounts:user_logout' %}">Sign out</a></li>
-          </ul>
-        </div>
+          <div class="dropdown text-end">
+            <a href="#" class="btn btn-primary text-white dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">Profile</a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+              <li><a href="{% url 'cart:show_cart' %}" class="dropdown-item">Cart</a></li>
+              <li><a href="{% url 'shop:favorites' %}" class="dropdown-item">Favorites</a></li>
+              <li><a href="{% url 'orders:user_orders' %}" class="dropdown-item">Orders</a></li>
+              <li><a href="{% url 'accounts:edit_profile' %}" class="dropdown-item">Edit Profile</a></li>
+              <li><a href="{% url 'accounts:user_logout' %}" class="dropdown-item text-danger">Sign out</a></li>
+            </ul>
+          </div>
         {% else %}
-        <!-- login, sign-up btn -->
-        <div class="text-end">
-          <a href="{% url 'accounts:user_login' %}" class="btn btn-outline-primary me-2">Login</a>
-          <a href="{% url 'accounts:user_register' %}" class="btn btn-primary">Sign-up</a>
-          <a href="{% url 'accounts:manager_login' %}" class="btn btn-primary">Manager</a>
-        </div>
+          <div class="text-end">
+            <a href="{% url 'accounts:user_login' %}" class="btn btn-outline-primary me-2">Login</a>
+            <a href="{% url 'accounts:user_register' %}" class="btn btn-primary">Sign-up</a>
+            <a href="{% url 'accounts:manager_login' %}" class="btn btn-primary">Manager</a>
+          </div>
         {% endif %}
       </div>
     </div>
   </header>
-    <main class="container">
-        <div class="row mt-3">
-          <!-- messages -->
-          {% if messages %}
-            {% for message in messages %}
-              <div class="alert alert-{{ message.tags }}">{{ message }}</div>
-            {% endfor %}
-          {% endif %}
-          <!-- content -->
-          {% block content %}{% endblock %}
-        </div>
-      </main>
-    <!-- Bootstrap JavaScript Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+  <main class="container">
+    <div class="row mt-3">
+      <!-- Messages -->
+      {% if messages %}
+        {% for message in messages %}
+          <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+      <!-- Content -->
+      {% block content %}{% endblock %}
+    </div>
+  </main>
+  <!-- Bootstrap JavaScript Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 </body>
 </html>

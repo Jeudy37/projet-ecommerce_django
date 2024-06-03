@@ -5,10 +5,10 @@ from django.template.defaultfilters import slugify
 
 class Category(models.Model):
     title = models.CharField(max_length=200)
-    sub_category = models.ForeignKey(
-        'self', on_delete=models.CASCADE,
-        related_name='sub_categories', null=True, blank=True
-    )
+    # sub_category = models.ForeignKey(
+    #     'self', on_delete=models.CASCADE,
+    #     related_name='sub_categories', null=True, blank=True
+    # )
     is_sub = models.BooleanField(default=False)
     slug = models.SlugField(max_length=200, unique=True)
 
