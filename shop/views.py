@@ -27,17 +27,22 @@ def home_page(request):
 
 def product_detail(request, slug):
 	form = QuantityForm()
-	product = get_object_or_404(Product, slug=slug)
-	related_products = Product.objects.filter(category=product.category).all()[:5]
-	context = {
-		'title':product.title,
-		'product':product,
-		'form':form,
-		'favorites':'favorites',
-		'related_products':related_products
-	}
-	if request.user.likes.filter(id=product.id).first():
-		context['favorites'] = 'remove'
+	try:
+
+		product = get_object_or_404(Product, slug=slug)
+		related_products = Product.objects.filter(category=product.category).all()[:5]
+		context = {
+			'title':product.title,
+			'product':product,
+			'form':form,
+			'favorites':'favorites',
+			'related_products':related_products
+		}
+		
+		if request.user.likes.filter(id=product.id).first():
+			context['favorites'] = 'remove'
+	except:
+		return redirect('accounts:user_login')
 	return render(request, 'product_detail.html', context)
 
 
@@ -77,20 +82,15 @@ def search(request):
 	return render(request, 'home_page.html', context)
 
 
-def filter_by_category(request, slug):
-	"""when user clicks on parent category
-	we want to show all products in its sub-categories too
-	"""
-	result = []
-	category = Category.objects.filter(slug=slug).first()
-	[result.append(product) \
-		for product in Product.objects.filter(category=category.id).all()]
-	# check if category is parent then get all sub-categories
-	if not category.is_sub:
-		sub_categories = category.sub_categories.all()
-		# get all sub-categories products 
-		for category in sub_categories:
-			[result.append(product) \
-				for product in Product.objects.filter(category=category).all()]
-	context = {'products': paginat(request ,result)}
-	return render(request, 'home_page.html', context)
+def filter_by_category(request, id):
+    category = get_object_or_404(Category, id=id)
+
+    # Initialize result list for products
+    result = Product.objects.filter(category=category)
+
+    # Log the result for debugging purposes
+    print('result', result)
+
+    # Paginate the result
+    context = {'products': paginat(request, result)}
+    return render(request, 'home_page.html', context)

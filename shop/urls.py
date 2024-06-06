@@ -12,5 +12,5 @@ urlpatterns = [
 	path('favorites/', views.favorites, name='favorites'),
 	path('about/', views.about_page, name='about'),
 	path('search/', views.search, name='search'),
-	path('filter/<slug:slug>/', views.filter_by_category, name='filter_by_category'),
+	path('filter/<int:id>/', views.filter_by_category, name='filter_by_category'),
 ]
