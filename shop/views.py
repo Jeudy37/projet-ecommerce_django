@@ -25,11 +25,11 @@ def home_page(request):
 	return render(request, 'home_page.html', context)
 
 
-def product_detail(request, slug):
+def product_detail(request, id):
 	form = QuantityForm()
 	try:
 
-		product = get_object_or_404(Product, slug=slug)
+		product = get_object_or_404(Product, id=id)
 		related_products = Product.objects.filter(category=product.category).all()[:5]
 		context = {
 			'title':product.title,
@@ -50,7 +50,7 @@ def product_detail(request, slug):
 def add_to_favorites(request, product_id):
 	product = get_object_or_404(Product, id=product_id)
 	request.user.likes.add(product)
-	return redirect('shop:product_detail', slug=product.slug)
+	return redirect('shop:product_detail', id=product_id)
 
 
 @login_required

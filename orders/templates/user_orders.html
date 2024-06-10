@@ -21,7 +21,7 @@
                             <hr>
                             {% for item in order.items.all %}
                                 <div class="mb-3">
-                                    <p class="mb-1"><b>Product:</b> <a class="text-decoration-none" href="{{ item.product.get_absolute_url }}">{{ item.product.title }}</a></p>
+                                    <p class="mb-1"><b>Product:</b> <a class="text-decoration-none" href="{{ item.product.id }}">{{ item.product.title }}</a></p>
                                     <p class="mb-1"><b>Price:</b> ${{ item.price }}</p>
                                     <p class="mb-1"><b>Quantity:</b> {{ item.quantity }}</p>
                                 </div>

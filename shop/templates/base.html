@@ -19,16 +19,11 @@
           <!-- Logo and Brand -->
           <strong class="me-4 text-primary" style="font-size: 24px;">Click 'n' Buy</strong>
           <!-- Cart icon -->
-          {% if request.user.is_authenticated %}
-            <span class="badge bg-primary me-2">{{ cart_count }}</span>
-          {% endif %}
+        
           <a href="{% url 'cart:show_cart' %}" class="text-primary me-3">
             <i class="material-icons h3 mb-0">&#xe8cc;</i>
           </a>
-          <!-- Favorite icon -->
-          {% if request.user.is_authenticated %}
-            <span class="badge bg-primary me-2">{{ request.user.get_likes_count }}</span>
-          {% endif %}
+          
           <a href="{% url 'shop:favorites' %}" class="text-primary me-3">
             <i class="material-icons h3 mb-0">&#xe87d;</i>
           </a>

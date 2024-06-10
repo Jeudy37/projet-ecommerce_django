@@ -19,7 +19,7 @@
     <tbody>
       <tr>
         <th scope="row">{{ forloop.counter }}</th>
-        <td><a class="text-decoration-none" href="{{ item.product.get_absolute_url }}">{{ item.product.title }}</a></td>
+        <td><a class="text-decoration-none" href="{{ item.product.id }}">{{ item.product.title }}</a></td>
         <td>${{ item.price }}</td>
         <td>{{ item.quantity }}</td>
         <td>${{ item.total_price }}</td>
