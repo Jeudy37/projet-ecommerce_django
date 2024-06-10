@@ -15,8 +15,8 @@ class Category(models.Model):
     def __str__(self):
         return self.title
 
-    def get_absolute_url(self):
-        return reverse('shop:product_detail', kwargs={'titlt':self.title})
+    # def get_absolute_url(self):
+    #     return reverse('shop:product_detail', kwargs={'title':self.title})
 
     def save(self, *args, **kwargs): # new
         self.slug = slugify(self.title)
